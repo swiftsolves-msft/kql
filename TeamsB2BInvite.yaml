@@ -1,0 +1,31 @@
+id: 1bf9c63c-7af1-423e-984a-ecf7d62d0e69
+name: Teams B2B Invite
+description: |
+  'Teams user invited an external user via AAD B2B to a Organizational Team'
+severity: Low
+requiredDataConnectors:
+  - connectorId: AzureActiveDirectory
+    dataTypes:
+      - AuditLogs
+queryFrequency: 30m
+queryPeriod: 30m
+triggerOperator: gt
+triggerThreshold: 0
+relevantTechniques:
+query: |
+    'let Invites = AuditLogs // using a table to join later to match on B2B Invite activity and Teams Add member to group
+    | where OperationName == "Invite external user"
+    | extend InvitedTo = tostring(TargetResources[0].userPrincipalName)
+    | extend InvitedToEmail = tostring(AdditionalDetails[1].value)
+    | summarize by InvitedTo, InvitedToEmail, OpsName = OperationName;
+    AuditLogs
+    | where OperationName == "Add member to group" and Identity == "Microsoft Teams Services" // filter only on Teams being used to add a member
+    | extend InvitedBy = tostring(parse_json(tostring(InitiatedBy.user)).userPrincipalName)
+    | extend InvitedTo = tostring(TargetResources[0].userPrincipalName)
+    | extend TeamInvited = tostring(parse_json(tostring(parse_json(tostring(TargetResources[0].modifiedProperties))[1].newValue)))
+    | where InvitedTo contains "#EXT#" // filter only on B2B Guest members added to group
+    | project InvitedBy, InvitedTo, TeamInvited, OperationName, Identity
+    | join kind = leftouter (Invites)
+    on $left.InvitedTo == $right.InvitedTo
+    | where OpsName != "" // removes any Teams Add member to group with an already Existing Guest - only newly B2B Invites via Teams will now show
+    | summarize by InvitedBy, InvitedToEmail, InvitedTo, TeamInvited, OperationName, OpsName, Identity'
