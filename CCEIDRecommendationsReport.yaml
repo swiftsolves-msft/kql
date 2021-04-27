@@ -1,0 +1,17 @@
+id: 5def768e-a369-4a51-9351-31749f30f384
+name: CCEID Recommendations Report
+description: |
+  'The following report can be used to send to cloud teams that need to clean up and harden their Servers and VMs OS settingsand configuration'
+requiredDataConnectors:
+  - connectorId: AzureSecurityCenter
+    dataTypes:
+      - SecurityBaseline
+query: |
+let tenantName = "custom.onmicrosoft.com";
+SecurityBaseline
+| where AnalyzeResult == "Failed"
+| extend inventoryURI = strcat(“https://portal.azure.com/#blade/Microsoft_Azure_Security/ResourceHealthBlade/resourceId/%2Fsubscriptions%2F”, SubscriptionId, "%2Fresourcegroups%2F", ResourceGroup, "%2Fproviders%2Fmicrosoft.compute%2Fvirtualmachines%2F", Resource)
+| extend resourceURI = strcat(“https://portal.azure.com/#@”, tenantName, "/resource/subscriptions/", SubscriptionId, "/resourceGroups/", ResourceGroup, "/providers/Microsoft.Compute/virtualMachines/", Resource, "/security")
+| summarize by Computer, CceId, Description, OSName, RuleSeverity, resourceURI, inventoryURI
+// | limit 1000000000
+| sort by Computer,RuleSeverity asc
