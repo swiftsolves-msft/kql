@@ -2,8 +2,10 @@
 //
 // https://azure.microsoft.com/en-us/pricing/calculator
 //
-// Query is missing images in container registry, SQL Cores, DNS requests, KeyVault and Storage transactions. 
-//    It will show count of SQL, Storage and Keyvaults, you can assume a base transaction count per storage and keyvault and apply
+// Query is missing images in container registry, SQL vCores, AKS vCores, DNS requests, KeyVault and Storage transactions. 
+//    It will show count of SQL, AKS Clusters, Storage, and Keyvaults. you can assume a base transaction count per storage and keyvault and apply
+//
+// https://azure.microsoft.com/en-us/pricing/details/azure-defender/
 //
 securityresources
 | where type =~ "microsoft.security/assessments"
