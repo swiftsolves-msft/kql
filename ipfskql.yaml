@@ -1,0 +1,30 @@
+// NSG Flow Logs might reveal IPFS activity through ports 4001 (comms with ipfs nodes) or 5001 (API server), 8080 (Gateway Server) can also be used in hosting ipfs
+AzureNetworkAnalytics_CL
+| where DestPort_d == 4001 or DestPort_d == 5001 //or DestPort_d == 8080
+| where FlowType_s == "ExternalPublic"
+
+// VM Insights may reveal IPFS activity through DNS names like cloudflare-ipfs.com or .ipfs.dweb.link, process name 'ipfs' can also be used if ipfs daemon or desktop browser is running in enviroment
+VMConnection
+| extend RemoteDnsQuestions = tostring(parse_json(RemoteDnsQuestions)[0])
+| extend RemoteDnsCanonicalNames = tostring(parse_json(RemoteDnsCanonicalNames)[0])
+| where RemoteDnsQuestions has "cloudflare-ipfs.com" or RemoteDnsQuestions has ".ipfs.dweb.link" //or ProcessName has "ipfs"
+
+// VM Insights may reveal IPFS daemon or desktop browser is running in enviroment DestinatrionPorts in the event the executable is renamed from ipfs
+// Port 4001 - https://www.speedguide.net/port.php?port=4001
+// Port 5001 - https://www.speedguide.net/port.php?port=5001
+VMConnection
+| extend RemoteDnsQuestions = tostring(parse_json(RemoteDnsQuestions)[0])
+| extend RemoteDnsCanonicalNames = tostring(parse_json(RemoteDnsCanonicalNames)[0])
+| where DestinationPort == 4001 or DestinationPort == 5001
+
+// Azure FW Network Rule might reveal IPFS activity through ports 4001 (comms with ipfs nodes) or 5001 (API server), 8080 (Gateway Server) can also be used in hosting ipfs
+AzureDiagnostics
+| where Category == "AzureFirewallNetworkRule"
+| parse msg_s with * "from " srcip ":" srcport " to " dstip ":" dstport ". Action:" action "." *
+| where srcport == 4001 or srcport == 5001 or dstport == 4001 or dstport == 5001 //or dstport == 8080 or dstport == 8080
+
+// Azure FW Application Rule IPFS activity through urls that contain '/Qm' or '.ipfs.dweb.link'
+AzureDiagnostics
+| where Category == "AzureFirewallApplicationRule"
+| parse msg_s with * "from " srcip ":" srcport " to " dstfqdn ":" dstport ". Url:" url ". Action: " action ". Policy" policy "." *
+| where url contains "/Qm" or url contains ".ipfs.dweb.link"
