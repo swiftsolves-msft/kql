@@ -9,10 +9,10 @@ To leverage the solution create a Azure storage account where you will store lon
 
 
 FUTURES:
-1.Build a .ps1 script to enter table name, dates to start and stop to lookup, and storage account where stored. Script then enumerates and generates SAS signatures for each .json blob. Script then will print and generate the specific KQL query to use. 
+1. Build a .ps1 script to enter table name, dates to start and stop to lookup, and storage account where stored. Script then enumerates and generates SAS signatures for each .json blob. Script then will print and generate the specific KQL query to use. 
 
-2.create parallelism in script to improve performance.
+2. create parallelism in script to improve performance.
 
-3.Additional function to then prompt for a custom kql query input after the externaldata lookup and execute kql query and export results in a csv format.
+3. Additional function to then prompt for a custom kql query input after the externaldata lookup and execute kql query and export results in a csv format.
 
 4. error handling for schema not found - create generic kql query instead
