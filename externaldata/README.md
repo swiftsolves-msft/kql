@@ -1,10 +1,14 @@
 # externaldata project
 author: Nathan Swift
 
-The following project will provide the example externaldata()[] KQL queries to use agaisnt Azure Storage where Data Export rules are sending the Azure Sentinel logs to for long term retention.
+The following project will provide the example externaldata()[] KQL queries and schema to use agaisnt Azure Storage, where Data Export rules are sending the Azure Sentinel logs to for long term retention.
 
-Run https://github.com/swiftsolves-msft/kql/blob/main/externaldata/genstoragectxkql.ps1 to generate a KQL Query with SAS Signatures for the storage blob logs.
+To leverage the solution create a Azure storage account where you will store long term retention security logs into. Create and deploy a data export rule to azure storage onto the Log analytics workspace, updating the deplyment template to include the table names that need to have the logs stored in log term retention.
+
+[Data Export ARM Template](https://docs.microsoft.com/en-us/azure/azure-monitor/logs/logs-data-export?tabs=json#create-or-update-data-export-rule)
+
 
 FUTURES:
 -Build a .ps1 script to enter table name, dates to start and stop to lookup, and storage account where stored. Script then enumerates and generates SAS signatures for each .json blob. Script then will print and generate the specific KQL query to use. 
+-create parallelism in script to improve performance.
 -Additional function to then prompt for a custom kql query input after the externaldata lookup and execute kql query and export results in a csv format.
