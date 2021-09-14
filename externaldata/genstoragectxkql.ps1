@@ -42,8 +42,10 @@ $storageid = (Get-AzResource -Name $storageaccount).ResourceId
 
 # Log analytics workspace table name
 $tablename = Read-Host -Prompt "Enter your table name to export"
+$tablename = $tablename.ToLower()
 $containername = "am-" + $tablename
 $containernamesearch = "am-" + $tablename + "*"
+
 
 # generate filepath for kql table query lookup
 $file = Get-Date -Format "yyyyMMddhhmmss"
@@ -75,6 +77,9 @@ $expiredattime = (Get-Date).AddHours(8)
 # Obtain URL for first line of extenaldata() lookup kql file
 $url = 'https://raw.githubusercontent.com/swiftsolves-msft/kql/main/externaldata/' + $tablename + '.yaml'
 $firststring = Invoke-WebRequest -UseBasicParsing $url
+
+#Build Error handling for generic lookup with no schema found
+
 $lineinsert =  ($firststring.Content).Split('[')[0] 
 Echo $lineinsert | Out-File $filepath -Append
 
