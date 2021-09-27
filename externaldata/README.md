@@ -3,7 +3,7 @@ author: Nathan Swift
 
 The following project will provide the example externaldata()[] KQL queries and schema to use agaisnt Azure Storage, where Data Export rules are sending the Azure Sentinel logs to for long term retention.
 
-To leverage the solution create a Azure storage account where you will store long term retention security logs into. Create and deploy a data export rule to azure storage onto the Log analytics workspace, updating the deplyment template to include the table names that need to have the logs stored in log term retention.
+To leverage the solution create a Azure storage account where you will store long term retention security logs into. Create and deploy a data export rule to azure storage onto the Log analytics workspace, updating the deployment template to include the table names that need to have the logs stored in log term retention.
 
 [Data Export ARM Template](https://docs.microsoft.com/en-us/azure/azure-monitor/logs/logs-data-export?tabs=json#create-or-update-data-export-rule)
 
