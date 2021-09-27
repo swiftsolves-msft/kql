@@ -12,9 +12,10 @@ Once logs are archiving into the Azure Storage account you can use the following
 [Generate Storage Lookup KQL Query PowerShel Script](https://github.com/swiftsolves-msft/kql/blob/main/externaldata/genstoragectxkql.ps1)
 
 Example input into the script:
-```StorageAcctName : siempipestorage
+```
 LAWorkspaceName : azulabs
-TbaleName 	: emailevents
+StorageAcctName : siempipestorage
+TableName 	: emailevents
 StartDate 	: 09/11/2021 02:00 AM
 EndDate 	: 09/12/2021 12:00 PM
 ```
