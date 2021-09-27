@@ -7,7 +7,7 @@ To leverage the solution create a Azure storage account where you will store lon
 
 [Data Export ARM Template](https://docs.microsoft.com/en-us/azure/azure-monitor/logs/logs-data-export?tabs=json#create-or-update-data-export-rule)
 
-One logs are archiving into the Azure Storage account you can use the following script to operationalize extenal data lookup tasks by generating the Base KQL query that will include the schema and the SAS Uri signatures needed for each blob in start and end time range for 8 hours.
+Once logs are archiving into the Azure Storage account you can use the following script to operationalize extenal data lookup tasks by generating the Base KQL query that will include the schema and the SAS Uri signatures needed for each blob in start and end time range for 8 hours.
 
 [Generate Storage Lookup KQL Query PowerShel Script](https://github.com/swiftsolves-msft/kql/blob/main/externaldata/genstoragectxkql.ps1)
 
