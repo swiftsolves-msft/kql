@@ -36,12 +36,15 @@ with(format="json")
 https://swiftsolvesblog.blob.core.windows.net/images/genstoragectxkql-ps1-animation.gif
 
 FUTURES:
-1. Build a .ps1 script to enter table name, dates to start and stop to lookup, and storage account where stored. Script then enumerates and generates SAS signatures for each .json blob. Script then will print and generate the specific KQL query to use. 
 
-2. create parallelism in script to improve performance.
+1. create parallelism in script to improve performance.
 
-3. Additional function to then prompt for a custom kql query input after the externaldata lookup and execute kql query and export results in a csv format.
+2. Additional function to then prompt for a custom kql query input after the externaldata lookup and execute kql query and export results in a csv format.
 
-4. error handling for schema not found - create generic kql query instead
+3. error handling for schema not found - create generic kql query instead
 
-5. allow script as a parameter to output into a choosen file directory, could be ran on windows or linux.
+4. allow script as a parameter to output into a choosen file directory, could be ran on windows or linux.
+
+5. create a Azure Sentinel Notebook to lookup Sentinel incident then prompt to look up historical dates and bring data back into notebook for searching purposes
+
+6. create a similar option with ADX cluster - a script to generate the database, pull schema in, and bring the data into the ADX cluster database.
