@@ -24,10 +24,6 @@ $enddate = [DateTime] "09/12/2021 12:00 PM"
 
 #>
 
-#generate kql query file you can use
-$file = Get-Date -Format "yyyyMMddhhmm"
-$filepath = "c:\temp\" + $file + ".yaml"
-
 # Prompt user for key information for look ups
 $loganalyticsworkspace = Read-Host -Prompt "Enter your Log Analytics workspace name to lookup logs"
 
@@ -49,7 +45,7 @@ $containernamesearch = "am-" + $tablename + "*"
 
 # generate filepath for kql table query lookup
 $file = Get-Date -Format "yyyyMMddhhmmss"
-$filepath = "c:\temp\" + $containername + $file + ".yaml"
+$filepath = $containername + $file + ".yaml" #"c:\temp\" + 
 
 # Start date to find log files for
 $startdate = Read-Host -Prompt "Enter your start date using this format as an ex. 09/11/2021 02:00 AM"
@@ -80,8 +76,11 @@ $firststring = Invoke-WebRequest -UseBasicParsing $url
 
 #Build Error handling for generic lookup with no schema found
 
-$lineinsert =  ($firststring.Content).Split('[')[0] 
+
+$lineinsert = ($firststring.Content).Split('[')[0] 
 Echo $lineinsert | Out-File $filepath -Append
+
+
 
 # count number of blobs to determine when last SAS uri is requested
 $numblobs = $blobs.Count
@@ -118,6 +117,9 @@ $lineinsert = ']'
 Echo $lineinsert | Out-File $filepath -Append
 $lineinsert = 'with(format="json")'
 Echo $lineinsert | Out-File $filepath -Append
+
+## Fix Caritridge return space
+(Get-Content $filepath) | ? {$_.trim() -ne "" } | set-content $filepath
 
 # Open a notepad of the KQL Query
 Start-Process notepad.exe $filepath
