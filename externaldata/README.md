@@ -33,9 +33,7 @@ with(format="json")
 ```
 
  ## Usage
-![Usage](https://swiftsolvesblog.blob.core.windows.net/images/genstoragectxkql-ps1-animation.gif)
-
-<img src="https://swiftsolvesblog.blob.core.windows.net/images/genstoragectxkql-ps1-animation.gif" width="600" height="600" />
+https://swiftsolvesblog.blob.core.windows.net/images/genstoragectxkql-ps1-animation.gif
 
 FUTURES:
 1. Build a .ps1 script to enter table name, dates to start and stop to lookup, and storage account where stored. Script then enumerates and generates SAS signatures for each .json blob. Script then will print and generate the specific KQL query to use. 
