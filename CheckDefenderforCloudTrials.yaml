@@ -1,0 +1,5 @@
+securityresources
+| where type =~ "microsoft.security/pricings"
+| project subscriptionId, bundleName = tolower(name), freeTrialRemainingTime = properties.freeTrialRemainingTime, pricingTier = tolower(properties.pricingTier)
+| extend bundlesPricing = pack(bundleName, pricingTier)
+| where bundleName == "virtualmachines"
