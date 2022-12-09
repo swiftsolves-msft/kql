@@ -1,0 +1,5 @@
+policyresources
+| where type == "microsoft.policyinsights/policystates"
+| extend hasDefaultAssignment = properties.policySetDefinitionName == "1f3afdf9-d0c9-4c3d-847f-89da613e70a8"
+| extend policyAssignmentScope = iff(hasDefaultAssignment, tostring(properties.policyAssignmentScope), '')
+| summarize hasDefaultAssignment= max(hasDefaultAssignment), policyAssignmentScopes = make_set(policyAssignmentScope) by subscriptionId
