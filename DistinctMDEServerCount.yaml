@@ -1,0 +1,4 @@
+DeviceInfo
+| where DeviceType == 'Server'
+| distinct DeviceName, DeviceType
+| summarize count() by DeviceType
