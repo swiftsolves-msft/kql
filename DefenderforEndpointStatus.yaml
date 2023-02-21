@@ -1,0 +1,19 @@
+resources
+| where type == 'microsoft.compute/virtualmachines'
+| extend resourceId = tolower(id)
+| join kind = leftouter (resources
+| where type == 'microsoft.compute/virtualmachines/extensions' and name has 'MDE'
+| extend resourceId = tolower((split(id, "/extensions"))[0])
+) on resourceId
+| extend state = (properties1.provisioningState)
+//| extend state = iff(isnotempty(properties1.provisioningState), "installed", "notInstalled", "Failed")
+//| where state == tostring(parse_json('"notInstalled"'))
+| project id, subscriptionId, tenantId, location, resourceGroup, state
+| join kind = inner ( securityresources
+| where type =~ "microsoft.security/pricings"
+| extend pricingTier = properties.pricingTier, subPlan = properties.subPlan
+| extend planSet = pack(name, level = case(isnotempty(subPlan),subPlan,pricingTier))
+| summarize defenderPlans = make_bag(planSet) by subscriptionId
+| project subscriptionId,
+        DefenderForServers = defenderPlans.VirtualMachines
+) on subscriptionId
