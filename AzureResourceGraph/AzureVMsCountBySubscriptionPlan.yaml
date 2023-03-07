@@ -1,0 +1,28 @@
+Resources
+| where type == 'microsoft.compute/virtualmachines'
+| project
+	id,
+	JoinID = toupper(id),
+	ComputerName = tostring(properties.osProfile.computerName),
+	//OSName = tostring(properties.osName)
+	OSName = tostring(properties.storageProfile.osDisk.osType)
+| join kind=leftouter(
+	Resources
+	| where type == 'microsoft.compute/virtualmachines/extensions'
+	| project
+		MachineId = toupper(substring(id, 0, indexof(id, '/extensions'))),
+		ExtensionName = name
+) on $left.JoinID == $right.MachineId
+| summarize Extensions = make_list(ExtensionName) by id, ComputerName, OSName
+| extend SubId = tostring(split(id, '/')[2])
+| order by tolower(OSName) asc
+| summarize count() by SubId
+| join kind=leftouter ( 
+	 securityresources
+    | where type =~ "microsoft.security/pricings"
+	| where name == "VirtualMachines"
+	| extend pricing = tostring(properties.pricingTier)
+	| extend plan = tostring(properties.subPlan)
+	| project subscriptionId, pricing, plan
+) on $left.SubId == $right.subscriptionId
+| project SubId, count_, pricing, plan
