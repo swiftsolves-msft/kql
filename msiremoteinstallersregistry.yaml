@@ -1,0 +1,6 @@
+// https://twitter.com/RLNetworkSec/status/1583814972744011776
+//You can detect remote MSI installers using registry modif events "InstallSource" pointing to a url/remote address (pretty good signal covering invoke via COM too)
+DeviceRegistryEvents
+| where InitiatingProcessFileName =~ "msiexec.exe"
+| where RegistryValueName has "installsource" 
+| where RegistryValueData has_any("http","https")
