@@ -1,0 +1,10 @@
+let OSTrigger = datatable(OS: string)['Linux','WindowsServer2012R2','WindowsServer2016','WindowsServer2019'];
+let Devicelookback = DeviceInfo
+| where Timestamp < ago(3h)
+| where OSPlatform in (OSTrigger)
+| summarize by DeviceId;
+DeviceInfo
+| where Timestamp >= ago(3h)
+| where OSPlatform in (OSTrigger)
+| where DeviceId !in (Devicelookback)
+| summarize by DeviceName, DeviceId, OSPlatform, OnboardingStatus, SensorHealthState
