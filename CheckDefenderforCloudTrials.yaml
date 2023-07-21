@@ -1,5 +1,9 @@
+// Hat tip Shawn Woolston on union for subscription names
 securityresources
+| join kind=leftouter (ResourceContainers 
+| where type=='microsoft.resources/subscriptions' 
+| project Subscription=name, subscriptionId) on subscriptionId
 | where type =~ "microsoft.security/pricings"
-| project subscriptionId, bundleName = tolower(name), freeTrialRemainingTime = properties.freeTrialRemainingTime, pricingTier = tolower(properties.pricingTier)
+| project Subscription, bundleName = tolower(name), freeTrialRemainingTime = properties.freeTrialRemainingTime, pricingTier = tolower(properties.pricingTier)
 | extend bundlesPricing = pack(bundleName, pricingTier)
 | where bundleName == "virtualmachines"
