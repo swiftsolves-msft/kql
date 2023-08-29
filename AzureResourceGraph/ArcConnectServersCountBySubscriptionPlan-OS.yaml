@@ -24,4 +24,8 @@ Resources
 	| extend plan = tostring(properties.subPlan)
 	| project subscriptionId, pricing, plan
 ) on $left.SubId == $right.subscriptionId
-| project SubId, count_, pricing, plan, OSName
+| join kind=leftouter (ResourceContainers 
+| where type=='microsoft.resources/subscriptions' 
+| project Subscription=name, subscriptionId) on subscriptionId
+| project Subscription, SubId, count_, pricing, plan, OSName
+| sort by OSName, count_ desc
