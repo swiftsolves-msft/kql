@@ -1,0 +1,11 @@
+//  rough estimate to determine if E5 Benefits for Sentinel Data Grant are above or below ingested data in those tables
+let E5lics = 250;
+let E5DataGrantMB = E5lics * 5;
+//print E5DataGrantMB
+Usage
+//| where TimeGenerated >= ago(24h)
+| where TimeGenerated >= datetime(2023-11-26)
+| where TimeGenerated < datetime(2023-11-27)
+| where DataType in ("SigninLogs", "AuditLogs", "NonInteractiveUserSignInLogs", "ServicePrincipalSignInLogs", "ManagedIdentitySignInLogs", "ProvisioningLogs", "ADFSSignInLogs", "RiskyUsers", "UserRiskEvents", "NetworkAccessTrafficLogs", "RiskyServicePrincipals", "ServicePrincipalRiskEvents", "EnrichedOffice365AuditLogs", "MicrosoftGraphActivityLogs", "DeviceInfo", "DeviceNetworkInfo", "DeviceProcessEvents", "DeviceNetworkEvents", "DeviceFileEvents", "DeviceRegistryEvents", "DeviceLogonEvents", "DeviceImageLoadEvents", "DeviceEvents", "DeviceFileCertificateInfo", "EmailEvents", "EmailUrlInfo", "EmailAttachmentInfo", "EmailPostDeliveryEvents", "UrlClickEvents", "CloudAppEvents", "IdentityLogonEvents", "IdentityQueryEvents", "IdentityDirectoryEvents", "AlertInfo", "AlertEvidence" )
+| summarize QualifiedDataGrantTablesMB = sum(Quantity)
+| project UnderOverUsageMB = QualifiedDataGrantTablesMB - E5DataGrantMB
