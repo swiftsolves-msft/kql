@@ -1,0 +1,10 @@
+let SmbSend = DeviceNetworkEvents
+| where RemotePort == 445
+| where ActionType == "ConnectionSuccess"
+| summarize by SenderIP = LocalIP, SenderDevice = DeviceName, FileServerIp = RemoteIP, FileServerName = RemoteUrl;
+// SmbServer receiving files must have MDE Installed to join below for DeviceFileEvents 
+DeviceFileEvents
+| where RequestProtocol == "Smb"
+| summarize by RequestSourceIP, RequestAccountDomain, ShareName, FileName, FolderPath, ActionType
+| join kind=inner SmbSend on $left.RequestSourceIP == $right.SenderIP
+| summarize by SenderIP, SenderDevice, FileServerIp, FileServerName, ShareName, FileName, FolderPath, ActionType
