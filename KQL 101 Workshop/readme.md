@@ -1,0 +1,3 @@
+# KQL 101 Workshop
+
+The following workshop is a modified version of Azure Sentinel ninja training that ofer and team built out and provided many years ago. This updated refactor is intended to be used in a Alpine Lab enviroment and instead focuses on examples on Defender XDR and Unified SOC data and tables. The content has been slimmed down to conduct in a hour and reduced as a primer to get started with meangiful commands and skills to build up on.
