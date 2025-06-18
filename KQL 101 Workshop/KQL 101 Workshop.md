@@ -4,14 +4,12 @@
 
 ## 'Search' operator
 
-Nathan Swift what do you think of making these examples without using "where" operator? That let audience focus on specific operator without introducing new entities.
-
 ```Kql
 //example 1
-search "10.0.1.5" | where Timestamp >= ago(1h)
+search "10.0.1.5"
 
 //eaxample 2
-SecurityEvent | where TimeGenerated >= ago(1h) | search "Guest"
+SecurityEvent | search "Guest"
 ```
 
 ## Search -  enhance, enhance, enhance
@@ -19,17 +17,14 @@ SecurityEvent | where TimeGenerated >= ago(1h) | search "Guest"
 ```Kql
 // does this data exist ?
 search "vnevado-win11t"
-| where Timestamp >= ago(30m) 
 
 // where and how often does the data exist ? 
 search "vnevado-win11t" 
-| where Timestamp >= ago(30m) 
 | summarize EventCount = count() by $table 
 | order by EventCount desc 
 
 // why does it exist ?
 search in (DeviceNetworkEvents) "vnevado-win11t"
-| where Timestamp >= ago(30m) 
 ```
 
 ## 'Where' -  exercise
